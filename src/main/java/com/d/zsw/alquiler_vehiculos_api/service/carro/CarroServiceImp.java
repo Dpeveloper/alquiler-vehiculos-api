@@ -33,7 +33,7 @@ public class CarroServiceImp implements CarroService{
 
         List<Carro> carrosDisponibles = carros.stream()
                 .filter(carro -> carro.getReservas().stream()
-                        .noneMatch(reserva -> reserva.getFechaFin().isAfter(inicio) || reserva.getLocacion().equals(locacion)))
+                        .noneMatch(reserva -> reserva.getFechaFin().isAfter(inicio) && reserva.getLocacion().equals(locacion)))
                 .collect(Collectors.toList());
 
         return carrosDisponibles.stream()
