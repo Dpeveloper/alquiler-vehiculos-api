@@ -22,8 +22,8 @@ public class CarroController {
     public ResponseEntity<CarroDto> addCarro(@RequestBody CarroDto carroDto) {
         return ResponseEntity.ok(carroService.save(carroDto));
     }
-    @GetMapping
-    public ResponseEntity<List<CarroDto>> listarCarrosDisponibles(@RequestParam LocalDate fin, @RequestParam Long locacion) {
+    @GetMapping("{id}")
+    public ResponseEntity<List<CarroDto>> listarCarrosDisponibles(@RequestParam LocalDate fin, @PathVariable("id") Long locacion) {
         List<CarroDto> carros = carroService.obtenerCarrosDisponibles(fin, locacion);
         return ResponseEntity.ok(carros);
     }

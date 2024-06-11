@@ -28,6 +28,7 @@ public class ReservaServiceImp implements ReservaService{
         Carro carro = carroRepository.findById(reservaToSaveDto.carroId())
                 .orElseThrow(() -> new RuntimeException("Carro no encontrado"));
         Reserva reserva1 = reservaMapper.reservaToSaveDtoToReserva(reservaToSaveDto);
+
         reserva1.setCarro(carro);
         return reservaMapper.toReservaDto(reservaRepository.save(reserva1));
     }
