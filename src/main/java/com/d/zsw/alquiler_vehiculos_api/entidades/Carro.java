@@ -19,4 +19,8 @@ public class Carro {
 
     @OneToMany(mappedBy = "carro", cascade = CascadeType.PERSIST)
     private List<Reserva> reservas;
+
+    @ManyToOne
+    @JoinColumn(name = "locacion_id",referencedColumnName = "id")
+    private Locacion locacion;
 }
