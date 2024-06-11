@@ -10,7 +10,7 @@ public interface CarroMapper {
     default CarroDto toCarroDto(Carro carro){
         return  new CarroDto(carro.getId(),
                 carro.getMarca(),
-                carro.getMarca(),
+                carro.getModelo(),
                 carro.getPlaca(),
                 carro.getImagen(),
                 carro.getPrecio(),
