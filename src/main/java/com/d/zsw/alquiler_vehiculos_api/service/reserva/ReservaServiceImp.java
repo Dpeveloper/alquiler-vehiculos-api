@@ -10,6 +10,8 @@ import com.d.zsw.alquiler_vehiculos_api.repository.ReservaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Period;
+
 @Service
 public class ReservaServiceImp implements ReservaService{
     private final ReservaRepository reservaRepository;
@@ -27,8 +29,13 @@ public class ReservaServiceImp implements ReservaService{
     public ReservaDto addReserva(ReservaToSaveDto reservaToSaveDto) {
         Carro carro = carroRepository.findById(reservaToSaveDto.carroId())
                 .orElseThrow(() -> new RuntimeException("Carro no encontrado"));
+
         Reserva reserva1 = reservaMapper.reservaToSaveDtoToReserva(reservaToSaveDto);
 
+        Period periodo = Period.between(reservaToSaveDto.fechaInicio(), reservaToSaveDto.fechaFin());
+        int diasEntrePeriod = periodo.getDays();
+
+        reserva1.setValor(diasEntrePeriod);
         reserva1.setCarro(carro);
         return reservaMapper.toReservaDto(reservaRepository.save(reserva1));
     }
