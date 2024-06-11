@@ -42,7 +42,7 @@ public class CarroServiceImp implements CarroService{
         List<Carro> carrosDisponibles = carros.stream()
                 .filter(carro -> carro.getLocacion().getId().equals(locacionId)) // Filtra por locación
                 .filter(carro -> carro.getReservas().stream()
-                        .noneMatch(reserva -> reserva.getFechaFin().isAfter(inicio) && reserva.getFechaInicio().isBefore(fin.minusDays(1)))) // Filtra por disponibilidad
+                        .noneMatch(reserva -> reserva.getFechaFin().isAfter(inicio) && reserva.getFechaInicio().isBefore(fin.plusDays(1)))) // Filtra por disponibilidad
                 .collect(Collectors.toList());
 
         return carrosDisponibles.stream()
