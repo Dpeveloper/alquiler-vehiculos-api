@@ -6,7 +6,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-@Entity(name = "Reservas")
+@Entity(name =)
 public class Reserva {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -15,11 +15,7 @@ public class Reserva {
     private LocalDate fechaFin;
     private double valor;
     private PropietarioAlquiler propietarioAlquiler;
-
-    @ManyToOne
-    @JoinColumn(name = "locacion_id",referencedColumnName = "id")
-    private Locacion locacion;
-
+    private String locacion;
     @ManyToOne
     @JoinColumn(name = "carro_id",referencedColumnName = "id")
     private Carro carro;

@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface CarroService {
     CarroDto save(CarroDto carroDto);
-    List<CarroDto> obtenerCarrosDisponibles(LocalDate fin);
+    List<CarroDto> obtenerCarrosDisponibles(LocalDate fin, String locacion);
 }
