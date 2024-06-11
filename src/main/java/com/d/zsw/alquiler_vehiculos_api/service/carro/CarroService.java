@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface CarroService {
     CarroDto save(CarroToSaveDto carroToSaveDto);
-    List<CarroDto> obtenerCarrosDisponibles(LocalDate fin, Long locacion);
+    List<CarroDto> obtenerCarrosDisponibles(LocalDate inicio, LocalDate fin, Long locacion);
 }
