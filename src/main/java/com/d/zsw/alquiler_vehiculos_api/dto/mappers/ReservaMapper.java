@@ -11,7 +11,6 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface ReservaMapper {
-    Reserva toReserva(ReservaDto reserva);
 
     default ReservaDto toReservaDto(Reserva reserva){
         PropietarioAlquiler propietarioAlquiler =
@@ -20,7 +19,7 @@ public interface ReservaMapper {
                         reserva.getPropietarioAlquiler().getTelefonoPropietarioAlquiler());
         Carro carro = reserva.getCarro();
 
-        CarroDto carroDto = new CarroDto(carro.getId(), carro.getMarca(),carro.getModelo(), carro.getPlaca(), carro.getImagen(), carro.getPrecio(),new LocacionDto(carro.getLocacion().getId(), carro.getLocacion().getNombre()));
+        CarroDto carroDto = new CarroDto(carro.getId(), carro.getMarca(),carro.getModelo(), carro.getPlaca(), carro.getImagen(), carro.getPrecio(),carro.getLocacion().getNombre());
         return new ReservaDto(reserva.getId(),
              reserva.getFechaInicio(),
              reserva.getFechaFin(),

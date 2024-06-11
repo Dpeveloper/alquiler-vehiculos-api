@@ -1,6 +1,7 @@
 package com.d.zsw.alquiler_vehiculos_api.controller;
 
 import com.d.zsw.alquiler_vehiculos_api.dto.CarroDto;
+import com.d.zsw.alquiler_vehiculos_api.dto.CarroToSaveDto;
 import com.d.zsw.alquiler_vehiculos_api.service.carro.CarroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +20,8 @@ public class CarroController {
     }
 
     @PostMapping
-    public ResponseEntity<CarroDto> addCarro(@RequestBody CarroDto carroDto) {
-        return ResponseEntity.ok(carroService.save(carroDto));
+    public ResponseEntity<CarroDto> addCarro(@RequestBody CarroToSaveDto carroToSaveDto) {
+        return ResponseEntity.ok(carroService.save(carroToSaveDto));
     }
     @GetMapping("{id}")
     public ResponseEntity<List<CarroDto>> listarCarrosDisponibles(@RequestParam LocalDate fin, @PathVariable("id") Long locacion) {

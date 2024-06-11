@@ -35,7 +35,7 @@ public class ReservaServiceImp implements ReservaService{
         Period periodo = Period.between(reservaToSaveDto.fechaInicio(), reservaToSaveDto.fechaFin());
         int diasEntrePeriod = periodo.getDays();
 
-        reserva1.setValor(diasEntrePeriod);
+        reserva1.setValor(diasEntrePeriod * carro.getPrecio());
         reserva1.setCarro(carro);
         return reservaMapper.toReservaDto(reservaRepository.save(reserva1));
     }
