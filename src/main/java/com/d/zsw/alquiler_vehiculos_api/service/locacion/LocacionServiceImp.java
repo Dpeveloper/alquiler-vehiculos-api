@@ -1,6 +1,7 @@
 package com.d.zsw.alquiler_vehiculos_api.service.locacion;
 
 import com.d.zsw.alquiler_vehiculos_api.dto.LocacionDto;
+import com.d.zsw.alquiler_vehiculos_api.dto.LocacionToSaveDto;
 import com.d.zsw.alquiler_vehiculos_api.dto.mappers.LocacionMapper;
 import com.d.zsw.alquiler_vehiculos_api.repository.LocacionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,8 @@ public class LocacionServiceImp implements LocacionService{
     }
 
     @Override
-    public LocacionDto guardarLocacion(LocacionDto locacionDto) {
-        return locacionMapper.toLocacionDto(locacionRepository.save(locacionMapper.toLocacion(locacionDto)));
+    public LocacionDto guardarLocacion(LocacionToSaveDto locacionToSaveDto) {
+        return locacionMapper.toLocacionDto(locacionRepository.save(locacionMapper.toLocacion(locacionToSaveDto)));
     }
 
     @Override
