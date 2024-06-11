@@ -23,7 +23,7 @@ public class CarroController {
         return ResponseEntity.ok(carroService.save(carroDto));
     }
     @GetMapping
-    public ResponseEntity<List<CarroDto>> listarCarrosDisponibles(@RequestParam LocalDate fin, @RequestParam String locacion) {
+    public ResponseEntity<List<CarroDto>> listarCarrosDisponibles(@RequestParam LocalDate fin, @RequestParam Long locacion) {
         List<CarroDto> carros = carroService.obtenerCarrosDisponibles(fin, locacion);
         return ResponseEntity.ok(carros);
     }

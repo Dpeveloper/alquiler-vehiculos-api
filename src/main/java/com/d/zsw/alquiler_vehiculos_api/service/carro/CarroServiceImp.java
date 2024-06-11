@@ -28,15 +28,14 @@ public class CarroServiceImp implements CarroService{
     }
 
     @Override
-    public List<CarroDto> obtenerCarrosDisponibles(LocalDate inicio, String locacion) {
+    public List<CarroDto> obtenerCarrosDisponibles(LocalDate inicio, Long locacion) {
         List<Carro> carros = carroRepository.findAll();
 
         List<Carro> carrosDisponibles = carros.stream()
                 .filter(carro -> carro.getReservas().stream()
                         .noneMatch(reserva -> reserva.getFechaFin()
                                 .isAfter(inicio) && reserva.getCarro()
-                                .getLocacion()
-                                .getNombre().equals(locacion)))
+                                .getLocacion().getId()==locacion))
                 .collect(Collectors.toList());
 
         return carrosDisponibles.stream()
