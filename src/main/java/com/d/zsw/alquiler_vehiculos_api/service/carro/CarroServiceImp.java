@@ -4,6 +4,7 @@ import com.d.zsw.alquiler_vehiculos_api.dto.CarroDto;
 import com.d.zsw.alquiler_vehiculos_api.dto.CarroToSaveDto;
 import com.d.zsw.alquiler_vehiculos_api.dto.mappers.CarroMapper;
 import com.d.zsw.alquiler_vehiculos_api.entidades.Carro;
+import com.d.zsw.alquiler_vehiculos_api.entidades.Reserva;
 import com.d.zsw.alquiler_vehiculos_api.repository.CarroRepository;
 import com.d.zsw.alquiler_vehiculos_api.repository.LocacionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,16 +38,29 @@ public class CarroServiceImp implements CarroService{
 
     @Override
     public List<CarroDto> obtenerCarrosDisponibles(LocalDate inicio, LocalDate fin, Long locacionId) {
-        List<Carro> carros = carroRepository.findAll();
-
-        List<Carro> carrosDisponibles = carros.stream()
-                .filter(carro -> carro.getLocacion().getId().equals(locacionId)) // Filtra por locación
-                .filter(carro -> carro.getReservas().stream()
-                        .noneMatch(reserva -> reserva.getFechaFin().isAfter(inicio.minusDays(1)) && reserva.getFechaInicio().isBefore(fin.plusDays(1)))) // Filtra por disponibilidad
-                .collect(Collectors.toList());
-
-        return carrosDisponibles.stream()
-                .map(carro -> carroMapper.toCarroDto(carro))
+        return carroRepository.findAll().stream()
+                .filter(carro -> esDeLocacion(carro, locacionId))
+                .filter(carro -> estaDisponible(carro, inicio, fin))
+                .map(carroMapper::toCarroDto)
                 .collect(Collectors.toList());
     }
+
+    private boolean esDeLocacion(Carro carro, Long locacionId) {
+        return carro.getLocacion() != null && carro.getLocacion().getId().equals(locacionId);
+    }
+
+    private boolean estaDisponible(Carro carro, LocalDate inicio, LocalDate fin) {
+        List<Reserva> reservas = carro.getReservas();
+        if (reservas == null || reservas.isEmpty()) {
+            return true;
+        }
+
+        return reservas.stream()
+                .noneMatch(reserva -> fechasSeTraslapan(reserva.getFechaInicio(), reserva.getFechaFin(), inicio, fin));
+    }
+
+    private boolean fechasSeTraslapan(LocalDate reservaInicio, LocalDate reservaFin, LocalDate nuevaInicio, LocalDate nuevaFin) {
+        return !reservaFin.isBefore(nuevaInicio) && !reservaInicio.isAfter(nuevaFin);
+    }
+
 }

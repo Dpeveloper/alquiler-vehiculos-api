@@ -7,13 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("reservas-vehiculos/v1/locacion")
 public class LocacionController {
-
-
-
 
     public final LocacionService locacionService;
 

@@ -7,10 +7,13 @@ import com.d.zsw.alquiler_vehiculos_api.entidades.Carro;
 import com.d.zsw.alquiler_vehiculos_api.entidades.Reserva;
 import com.d.zsw.alquiler_vehiculos_api.repository.CarroRepository;
 import com.d.zsw.alquiler_vehiculos_api.repository.ReservaRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 
 @Service
 public class ReservaServiceImp implements ReservaService{
@@ -26,17 +29,35 @@ public class ReservaServiceImp implements ReservaService{
     }
 
     @Override
+    @Transactional
     public ReservaDto addReserva(ReservaToSaveDto reservaToSaveDto) {
         Carro carro = carroRepository.findById(reservaToSaveDto.carroId())
                 .orElseThrow(() -> new RuntimeException("Carro no encontrado"));
 
-        Reserva reserva1 = reservaMapper.reservaToSaveDtoToReserva(reservaToSaveDto);
+        LocalDate inicio = reservaToSaveDto.fechaInicio();
+        LocalDate fin = reservaToSaveDto.fechaFin();
 
-        Period periodo = Period.between(reservaToSaveDto.fechaInicio(), reservaToSaveDto.fechaFin());
-        int diasEntrePeriod = periodo.getDays();
+        if (fin.isBefore(inicio)) {
+            throw new IllegalArgumentException("La fecha de fin no puede ser anterior a la fecha de inicio.");
+        }
 
-        reserva1.setValor(diasEntrePeriod * carro.getPrecio());
-        reserva1.setCarro(carro);
-        return reservaMapper.toReservaDto(reservaRepository.save(reserva1));
+        boolean tieneConflictos = carro.getReservas().stream()
+                .anyMatch(reserva ->
+                        !reserva.getFechaFin().isBefore(inicio) &&
+                                !reserva.getFechaInicio().isAfter(fin)
+                );
+
+        if (tieneConflictos) {
+            throw new IllegalStateException("El carro ya está reservado en el rango de fechas seleccionado.");
+        }
+
+        long diasEntre = ChronoUnit.DAYS.between(inicio, fin) + 1;
+        Reserva reserva = reservaMapper.reservaToSaveDtoToReserva(reservaToSaveDto);
+        reserva.setValor(diasEntre * carro.getPrecio());
+        reserva.setCarro(carro);
+
+        return reservaMapper.toReservaDto(reservaRepository.save(reserva));
     }
+
+
 }
